@@ -23,10 +23,11 @@
 
       /* grayscale-900 : #19212A  - h2 */
       /* graysacle-700 : #565B65 - 대부분 텍스트*/
-      /* graysacle-200 : #E7EAEF - 전기 버튼 disabled border*/
-      /* primary-700 : #FA502E */
-      /* primary-500 : #FA502E */
-      /* primary-50 :  #FFEFE8 */
+      /* graysacle-300 : #CCCED5 - 입력창 border color */
+      /* graysacle-200 : #E7EAEF - 전기 버튼 disabled border color*/
+      /* primary-700 : #FA502E 전기 버튼 abled color*/
+      /* primary-500 : #FA502E 전기 버튼 abled border color */
+      /* primary-50 :  #FFEFE8 전기 버튼 abled bg-color*/
 
       body {
         font-family: "Pretandard", "Noto Sans KR", sans-serif;
@@ -36,31 +37,32 @@
         color: #565b65;
       }
       h2 {
+        margin-top: 0;
         font-weight: 600;
         text-align: center;
         margin-bottom: 30px;
-        font-size: 18px;
-        color: #19212a;
+        font-size: 16px;
+        color: #000;
       }
 
       .section {
-        margin-bottom: 20px;
+        /* margin-bottom: 20px; */
       }
       .label {
         font-weight: 600;
         font-size: 14px;
-        margin-bottom: 8px;
+        margin-bottom: 20px;
         display: block;
+        color: #19212a;
       }
 
       /* 입력창 처럼 보이는 박스 스타일 */
       .input-box {
-        border: 1px solid #ddd;
-        border-radius: 8px;
+        border: 1px solid #ccced5;
+        border-radius: 16px;
         padding: 12px;
         font-size: 14px;
-        color: #555;
-        margin-bottom: 10px;
+        color: #565b65;
         background-color: #fff; /* 배경색 명시 */
       }
 
@@ -98,6 +100,26 @@
         color: #fa502e;
         font-weight: 600;
       }
+
+      .location-info {
+        display: table;
+        width: 100%; /* 전체 너비 사용 */
+        margin-bottom: 10px; /* 항목 간 간격 */
+      }
+      .location-info p {
+        display: table-cell;
+        width: 80px; /* 라벨의 고정 너비 설정 (필요에 따라 조절) */
+        vertical-align: middle; /* 수직 중앙 정렬 */
+        font-weight: 600;
+        font-size: 12px;
+        margin: 0; /* p태그 기본 여백 제거 필수 */
+        padding-right: 10px; /* 입력창과의 간격 */
+      }
+
+      .seperator {
+        border-top: 1px solid #f2f3f7;
+        margin: 26px 0;
+      }
     </style>
   </head>
   <body>
@@ -105,11 +127,21 @@
 
     <div class="section">
       <span class="label">위치</span>
-      <div class="input-box" th:text="${addressMain}">
-        서울특별시 광진구 화양동
-      </div>
-      <div class="input-box" th:text="${addressDetail}">차콜로 123</div>
+
+      <nav class="location-info">
+        <p>시/군/구</p>
+        <div class="input-box" th:text="${addressMain}">
+          서울특별시 광진구 화양동
+        </div>
+      </nav>
+
+      <nav class="location-info">
+        <p>상세주소</p>
+        <div class="input-box" th:text="${addressDetail}">차콜로 123</div>
+      </nav>
     </div>
+
+    <div class="seperator"></div>
 
     <div class="section">
       <span class="label">일정</span>
@@ -125,7 +157,7 @@
         >
       </div>
     </div>
-
+    <div class="seperator"></div>
     <div class="section">
       <span class="label">운영 시간대</span>
       <div class="input-box">
@@ -148,14 +180,14 @@
         >
       </div>
     </div>
-
+    <div class="seperator"></div>
     <div class="section">
       <span class="label">음식</span>
       <div class="input-box" style="min-height: 60px" th:text="${menus}">
         짜장면, 짬뽕, 탕수육
       </div>
     </div>
-
+    <div class="seperator"></div>
     <div class="section">
       <span class="label">금액</span>
       <div class="input-box">
@@ -164,7 +196,7 @@
         >
       </div>
     </div>
-
+    <div class="seperator"></div>
     <div class="section">
       <span class="label">전기 사용 유무</span>
       <div class="btn-group">
@@ -174,7 +206,7 @@
         >
       </div>
     </div>
-
+    <div class="seperator"></div>
     <div class="section">
       <span class="label">기타 요청 사항</span>
       <div class="input-box" style="min-height: 80px" th:text="${requests}">
