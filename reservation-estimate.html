@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>예약 견적서</title>
+    <style>
+      @font-face {
+        font-family: "Pretandard";
+        font-weight: 500;
+        font-style: normal;
+        src: url(data:font/ttf;charset=utf-8;base64) format("truetype");
+      }
+
+      @font-face {
+        font-family: "Pretandard";
+        font-weight: 600;
+        font-style: normal;
+        src: url(data:font/ttf;charset=utf-8;base64) format("truetype");
+      }
+
+      /* PDF 변환 엔진(Flying Saucer, Puppeteer 등) 호환성을 위해
+           Flexbox 대신 안정한 Block/Inline-block 모델과 고정 단위(px, pt)를 사용합니다. */
+
+      /* grayscale-900 : #19212A  - h2 */
+      /* graysacle-700 : #565B65 - 대부분 텍스트*/
+      /* graysacle-200 : #E7EAEF - 전기 버튼 disabled border*/
+      /* primary-700 : #FA502E */
+      /* primary-500 : #FA502E */
+      /* primary-50 :  #FFEFE8 */
+
+      body {
+        font-family: "Pretandard", "Noto Sans KR", sans-serif;
+        max-width: 600px; /* A4 폭에 맞게 조정 가능 */
+        margin: 0 auto;
+        padding: 20px;
+        color: #565b65;
+      }
+      h2 {
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 18px;
+        color: #19212a;
+      }
+
+      .section {
+        margin-bottom: 20px;
+      }
+      .label {
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 8px;
+        display: block;
+      }
+
+      /* 입력창 처럼 보이는 박스 스타일 */
+      .input-box {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 10px;
+        background-color: #fff; /* 배경색 명시 */
+      }
+
+      /* .input-box 내부의 이미지와 텍스트 수직 정렬 수정 */
+      .input-box img,
+      .input-box span {
+        vertical-align: middle; /* 핵심: 요소를 중간 라인에 맞춤 */
+        display: inline-block; /* 높이 계산을 정확하게 하기 위해 */
+        margin-top: -2px;
+      }
+
+      .input-box img {
+        margin-right: 15px;
+      }
+
+      /* 전기 사용 유무 버튼 스타일 */
+      .btn-group {
+        display: table;
+        width: 100%;
+      }
+      .btn {
+        display: inline-block;
+        border: 1px solid #e7eaef;
+        border-radius: 20px;
+        padding: 8px 20px;
+        margin-right: 10px;
+        font-size: 13px;
+        text-align: center;
+        color: #565b65;
+      }
+      /* 활성화 된 상태 (붉은색) - 서버 로직에 의해 붙을 클래스 */
+      .btn.active {
+        border-color: #fa502e;
+        background-color: #ffefe8;
+        color: #fa502e;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>예약 견적서 검토</h2>
+
+    <div class="section">
+      <span class="label">위치</span>
+      <div class="input-box" th:text="${addressMain}">
+        서울특별시 광진구 화양동
+      </div>
+      <div class="input-box" th:text="${addressDetail}">차콜로 123</div>
+    </div>
+
+    <div class="section">
+      <span class="label">일정</span>
+      <div class="input-box">
+        <img
+          src="data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0 22 22' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M7 3C6.44772 3 6 3.44772 6 4V5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19H17C18.1046 19 19 18.1046 19 17V7C19 5.89543 18.1046 5 17 5H16V4C16 3.44772 15.5523 3 15 3C14.4477 3 14 3.44772 14 4V5H8V4C8 3.44772 7.55228 3 7 3ZM7 8C6.44772 8 6 8.44772 6 9C6 9.55228 6.44772 10 7 10H15C15.5523 10 16 9.55228 16 9C16 8.44772 15.5523 8 15 8H7Z' fill='%23565B65'/%3E%3C/svg%3E%0A"
+          alt="calendar icon"
+          width="22"
+          height="22"
+        />
+        <span th:text="|${startDate} ~ ${endDate}|"
+          >2025 / 09 / 01 — 2025 / 09 / 03</span
+        >
+      </div>
+    </div>
+
+    <div class="section">
+      <span class="label">운영 시간대</span>
+      <div class="input-box">
+        <img
+          src="data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0
+        22 22' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11
+        2.75C15.5563 2.75 19.25 6.44365 19.25 11C19.25 15.5563 15.5563 19.25 11
+        19.25C6.44365 19.25 2.75 15.5563 2.75 11C2.75 6.44365 6.44365 2.75 11
+        2.75ZM11 6.8125C10.5858 6.8125 10.25 7.14829 10.25 7.5625V11.5898C10.25
+        11.7842 10.3259 11.9705 10.4609 12.1104L13.2109 14.958C13.4987 15.256
+        13.9725 15.2643 14.2705 14.9766C14.5685 14.6888 14.5768 14.215 14.2891
+        13.917L11.75 11.2861V7.5625C11.75 7.14829 11.4142 6.8125 11 6.8125Z'
+        fill='%23565B65'/%3E%3C/svg%3E%0A"
+          alt="시계 아이콘"
+          width="22"
+          height="22"
+        />
+        <span th:text="|${startTime} ~ ${endTime}|"
+          >오전 00:00 — 오후 00:00</span
+        >
+      </div>
+    </div>
+
+    <div class="section">
+      <span class="label">음식</span>
+      <div class="input-box" style="min-height: 60px" th:text="${menus}">
+        짜장면, 짬뽕, 탕수육
+      </div>
+    </div>
+
+    <div class="section">
+      <span class="label">금액</span>
+      <div class="input-box">
+        <span th:text="${#numbers.formatInteger(totalPrice, 0, 'COMMA')}"
+          >100,000</span
+        >
+      </div>
+    </div>
+
+    <div class="section">
+      <span class="label">전기 사용 유무</span>
+      <div class="btn-group">
+        <span class="btn" th:classappend="${isElecUsed} ? 'active'">필요</span>
+        <span class="btn" th:classappend="${!isElecUsed} ? 'active'"
+          >불필요</span
+        >
+      </div>
+    </div>
+
+    <div class="section">
+      <span class="label">기타 요청 사항</span>
+      <div class="input-box" style="min-height: 80px" th:text="${requests}">
+        맛있게 해주세요.
+      </div>
+    </div>
+  </body>
+</html>
